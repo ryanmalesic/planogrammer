@@ -1,0 +1,15 @@
+{
+  "name": "@planogrammer/client",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "yarn build:client-sdk",
+    "build:client-sdk": "cd build/smithyprojections/client/ts-client/typescript-codegen && yarn install && yarn build",
+    "generate": "cd ../ && ./gradlew :client:build"
+  },
+  "dependencies": {
+    "@planogrammer/client-sdk": "workspace:client/build/smithyprojections/client/ts-client/typescript-codegen"
+  },
+  "workspaces": [
+    "build/smithyprojections/client/ts-client/typescript-codegen"
+  ]
+}

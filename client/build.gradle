@@ -1,0 +1,35 @@
+import software.amazon.smithy.gradle.tasks.SmithyBuild
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'software.ryanmalesic.planogrammer:model:0.1.0'
+        classpath 'software.amazon.smithy.typescript:smithy-typescript-codegen:0.11.0'
+        classpath 'software.amazon.smithy.typescript:smithy-aws-typescript-codegen:0.11.0'
+        classpath 'software.amazon.smithy:smithy-model:1.19.0'
+        classpath 'software.amazon.smithy:smithy-cli:1.19.0'
+    }
+}
+
+plugins {
+    id 'software.amazon.smithy'
+}
+
+dependencies {
+    implementation 'software.ryanmalesic.planogrammer:model:0.1.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+jar.enabled = false
+smithyBuildJar.enabled = false
+
+task generateClient(type: SmithyBuild) { }
+
+build.dependsOn generateClient

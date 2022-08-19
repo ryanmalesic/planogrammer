@@ -1,0 +1,15 @@
+{
+  "name": "@planogrammer/server",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "yarn build:server-sdk",
+    "build:server-sdk": "cd build/smithyprojections/server/ts-server/typescript-ssdk-codegen && yarn install && yarn build",
+    "generate": "cd ../ && ./gradlew :client:build"
+  },
+  "dependencies": {
+    "@planogrammer/server-sdk": "workspace:server/build/smithyprojections/server/ts-server/typescript-ssdk-codegen"
+  },
+  "workspaces": [
+    "build/smithyprojections/server/ts-server/typescript-ssdk-codegen"
+  ]
+}
