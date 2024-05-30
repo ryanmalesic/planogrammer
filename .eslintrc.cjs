@@ -7,9 +7,10 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:storybook/recommended',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '!.storybook'],
   parser: '@typescript-eslint/parser',
   plugins: ['import', 'react-refresh'],
   rules: {

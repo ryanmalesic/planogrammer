@@ -10,9 +10,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 
-export default function Avatar() {
+interface AvatarProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export default function Avatar(props: AvatarProps) {
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      open={props.open}
+      onOpenChange={props.onOpenChange}
+    >
       <DropdownMenuTrigger asChild>
         <Button
           className='rounded-full'
