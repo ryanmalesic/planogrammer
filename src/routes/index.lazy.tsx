@@ -1,12 +1,17 @@
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button.tsx'
 
-function App() {
+export const Route = createLazyFileRoute('/')({
+  component: Index,
+})
+
+function Index() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className='flex h-dvh w-dvw flex-col items-center justify-center gap-4'>
+    <div className='flex flex-1 flex-col items-center justify-center gap-4'>
       <h1 className='text-4xl font-semibold'>Vite + React</h1>
       <Button
         variant='default'
@@ -20,5 +25,3 @@ function App() {
     </div>
   )
 }
-
-export default App
