@@ -20,6 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    "types": ["jest"],
+
     "baseUrl": ".",
     "paths": {
       "/*": ["./public/*"],

@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import * as path from 'node:path'
 
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
@@ -11,5 +13,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
   },
 })
