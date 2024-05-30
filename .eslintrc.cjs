@@ -4,15 +4,49 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
+    'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['import', 'react-refresh'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
+    'import/order': [
+      'error',
+      {
+        alphabetize: {
+          order: 'asc',
+        },
+        groups: ['type', 'builtin', 'external', 'internal', 'parent', ['sibling', 'index']],
+        'newlines-between': 'always',
+      },
     ],
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-sort-props': [
+      'error',
+      {
+        callbacksLast: true,
+        shorthandFirst: true,
+        multiline: 'last',
+        ignoreCase: false,
+        noSortAlphabetically: false,
+        reservedFirst: true,
+        locale: 'auto',
+      },
+    ],
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+  },
+  settings: {
+    'import/internal-regex': '^{@,~}/*',
+    'import/resolver': {
+      node: true,
+      typescript: true,
+    },
+    react: {
+      version: 'detect',
+    },
   },
 }
