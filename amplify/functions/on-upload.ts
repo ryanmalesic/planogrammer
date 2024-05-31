@@ -7,7 +7,7 @@ export const handler: S3Handler = async event => {
   const object =
     event.Records.map(record => ({ bucket: record.s3.bucket.name, key: record.s3.object.key }))[0] ?? undefined
 
-  if (!object) {
+  if (!object || !object.key.toLowerCase().endsWith('.csv')) {
     return
   }
 

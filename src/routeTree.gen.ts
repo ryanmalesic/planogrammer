@@ -11,7 +11,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
+
 import { Route as rootRoute } from './routes/__root'
+import { Route as BooksImport } from './routes/books'
+import { Route as BooksIndexImport } from './routes/books.index'
 
 // Create Virtual Routes
 
@@ -19,10 +22,20 @@ const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
+const BooksRoute = BooksImport.update({
+  path: '/books',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/books.lazy').then(d => d.Route))
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then(d => d.Route))
+
+const BooksIndexRoute = BooksIndexImport.update({
+  path: '/',
+  getParentRoute: () => BooksRoute,
+} as any).lazy(() => import('./routes/books.index.lazy').then(d => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -35,12 +48,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/books': {
+      id: '/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof BooksImport
+      parentRoute: typeof rootRoute
+    }
+    '/books/': {
+      id: '/books/'
+      path: '/'
+      fullPath: '/books/'
+      preLoaderRoute: typeof BooksIndexImport
+      parentRoute: typeof BooksImport
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexLazyRoute,
+  BooksRoute: BooksRoute.addChildren({ BooksIndexRoute }),
+})
 
 /* prettier-ignore-end */
 
@@ -50,11 +80,22 @@ export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/books"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/books": {
+      "filePath": "books.tsx",
+      "children": [
+        "/books/"
+      ]
+    },
+    "/books/": {
+      "filePath": "books.index.tsx",
+      "parent": "/books"
     }
   }
 }

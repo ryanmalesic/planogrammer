@@ -5,9 +5,11 @@ import Layout from '@/components/dashboard/layout.tsx'
 
 export const Route = createRootRoute({
   component: () => (
-    <Layout>
-      <Outlet />
+    <>
+      <Layout>
+        <Outlet />
+      </Layout>
       <TanStackRouterDevtools />
-    </Layout>
+    </>
   ),
 })
