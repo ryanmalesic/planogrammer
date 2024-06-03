@@ -13,7 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ItemsImport } from './routes/items'
 import { Route as BooksImport } from './routes/books'
+import { Route as ItemsIndexImport } from './routes/items.index'
 import { Route as BooksIndexImport } from './routes/books.index'
 
 // Create Virtual Routes
@@ -21,6 +23,11 @@ import { Route as BooksIndexImport } from './routes/books.index'
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ItemsRoute = ItemsImport.update({
+  path: '/items',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/items.lazy').then(d => d.Route))
 
 const BooksRoute = BooksImport.update({
   path: '/books',
@@ -31,6 +38,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then(d => d.Route))
+
+const ItemsIndexRoute = ItemsIndexImport.update({
+  path: '/',
+  getParentRoute: () => ItemsRoute,
+} as any)
 
 const BooksIndexRoute = BooksIndexImport.update({
   path: '/',
@@ -55,12 +67,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksImport
       parentRoute: typeof rootRoute
     }
+    '/items': {
+      id: '/items'
+      path: '/items'
+      fullPath: '/items'
+      preLoaderRoute: typeof ItemsImport
+      parentRoute: typeof rootRoute
+    }
     '/books/': {
       id: '/books/'
       path: '/'
       fullPath: '/books/'
       preLoaderRoute: typeof BooksIndexImport
       parentRoute: typeof BooksImport
+    }
+    '/items/': {
+      id: '/items/'
+      path: '/'
+      fullPath: '/items/'
+      preLoaderRoute: typeof ItemsIndexImport
+      parentRoute: typeof ItemsImport
     }
   }
 }
@@ -70,6 +96,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   BooksRoute: BooksRoute.addChildren({ BooksIndexRoute }),
+  ItemsRoute: ItemsRoute.addChildren({ ItemsIndexRoute }),
 })
 
 /* prettier-ignore-end */
@@ -81,7 +108,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/books"
+        "/books",
+        "/items"
       ]
     },
     "/": {
@@ -93,9 +121,19 @@ export const routeTree = rootRoute.addChildren({
         "/books/"
       ]
     },
+    "/items": {
+      "filePath": "items.tsx",
+      "children": [
+        "/items/"
+      ]
+    },
     "/books/": {
       "filePath": "books.index.tsx",
       "parent": "/books"
+    },
+    "/items/": {
+      "filePath": "items.index.tsx",
+      "parent": "/items"
     }
   }
 }

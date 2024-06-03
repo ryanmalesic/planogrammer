@@ -18,31 +18,21 @@ import {
 
 const client = generateClient<Schema>()
 
-export const fetchBooks = async () => {
-  const response = await client.models.Book.list()
-  const books = response.data
-  if (!books) return null
-  return books
+export const fetchItems = async (category: string, date: string) => {
+  const response = await client.models.Item.listItemByCategoryAndDate({ category, date: { eq: date } })
+  const items = response.data
+  if (!items) return null
+  return items
 }
 
-export const booksQueryOptions = queryOptions({
-  queryKey: ['books'],
-  queryFn: () => fetchBooks(),
-})
+export const itemsQueryOptions = (category?: string | null, date?: string | null) =>
+  queryOptions({
+    queryKey: ['items', [category, date]],
+    queryFn: () => fetchItems(category!, date!),
+    enabled: !!category && !!date,
+  })
 
-export const fetchLatestBook = async () => {
-  const response = await client.models.Book.list()
-  const books = response.data
-  if (!books) return null
-  return books.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).at(0) ?? null
-}
-
-export const latestBookQueryOptions = queryOptions({
-  queryKey: ['book/latest'],
-  queryFn: () => fetchLatestBook(),
-})
-
-export const bookDataTableColumnDef: ColumnDef<Schema['Book']['type']>[] = [
+export const itemDataTableColumnDef: ColumnDef<Schema['Item']['type']>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -63,29 +53,24 @@ export const bookDataTableColumnDef: ColumnDef<Schema['Book']['type']>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: 'id',
+    header: 'ID',
   },
   {
-    accessorKey: 'date',
-    header: 'Run Date',
+    accessorKey: 'upc',
+    header: 'UPC',
   },
   {
-    accessorKey: 'items',
-    header: 'Items',
+    accessorFn: item => `${item.brand} ${item.name}`,
+    header: 'Brand / Name',
   },
   {
-    accessorKey: 'categories',
-    header: 'Categories',
-    cell: ({ row }) => (row.getValue('categories') as string[]).length,
+    accessorFn: item => `${item.pack} @ ${item.size}`,
+    header: 'Pack / Size',
   },
   {
-    accessorKey: 'createdAt',
-    header: 'Uploaded At',
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt') as string)
-      return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
-    },
+    accessorFn: item => `${item.subCategory} -> ${item.variety}`,
+    header: 'Category',
   },
   {
     id: 'actions',
@@ -108,7 +93,7 @@ export const bookDataTableColumnDef: ColumnDef<Schema['Book']['type']>[] = [
             <DropdownMenuContent align='end'>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigator.clipboard.writeText(book.name)}>
-                Copy book name
+                Copy item name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>View items</DropdownMenuItem>

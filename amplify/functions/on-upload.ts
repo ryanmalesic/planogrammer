@@ -3,6 +3,9 @@ import type { S3Handler } from 'aws-lambda'
 
 import { SFNClient, StartExecutionCommand } from '@aws-sdk/client-sfn'
 
+// eslint-disable-next-line import/no-unresolved
+import { env } from '$amplify/env/onUpload'
+
 export const handler: S3Handler = async event => {
   const object =
     event.Records.map(record => ({ bucket: record.s3.bucket.name, key: record.s3.object.key }))[0] ?? undefined
@@ -15,8 +18,7 @@ export const handler: S3Handler = async event => {
 
   const startExecutionCommandInput: StartExecutionCommandInput = {
     input: JSON.stringify(object),
-    stateMachineArn:
-      'arn:aws:states:us-west-2:654654487600:stateMachine:amplify-d1i2uiv21e52zr-main-branch-b7e65a0b8e-book-statemachine',
+    stateMachineArn: env.BOOK_PROCESSOR_STATE_MACHINE_ARN,
   }
   const startExecutionCommand = new StartExecutionCommand(startExecutionCommandInput)
 

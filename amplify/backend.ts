@@ -17,8 +17,6 @@ const backend = defineBackend({
 backend.onUpload.resources.lambda.addToRolePolicy(
   new PolicyStatement({
     actions: ['states:StartExecution'],
-    resources: [
-      'arn:aws:states:us-west-2:654654487600:stateMachine:amplify-d1i2uiv21e52zr-main-branch-b7e65a0b8e-book-statemachine',
-    ],
+    resources: [process.env.BOOK_PROCESSOR_STATE_MACHINE_ARN as string],
   })
 )

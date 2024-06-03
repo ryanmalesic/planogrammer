@@ -10,4 +10,7 @@ export const onUpload = defineFunction({
   name: 'onUpload',
   entry: './on-upload.ts',
   timeoutSeconds: 5,
+  environment: {
+    BOOK_PROCESSOR_STATE_MACHINE_ARN: process.env.BOOK_PROCESSOR_STATE_MACHINE_ARN as string,
+  },
 })
