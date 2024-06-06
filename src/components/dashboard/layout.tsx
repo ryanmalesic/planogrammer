@@ -8,7 +8,7 @@ import Title from '@/components/dashboard/title.tsx'
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className='grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
+    <div className='grid min-h-screen w-full overflow-hidden md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
       <div className='hidden border-r bg-muted/40 md:block'>
         <div className='flex h-full max-h-screen flex-col gap-2'>
           <Title />
@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Premium />
         </div>
       </div>
-      <div className='flex flex-col'>
+      <div className='flex flex-col overflow-hidden'>
         <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
           <div className='w-full flex-1'>
             <SearchBar />
@@ -28,7 +28,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             onOpenChange={() => {}}
           />
         </header>
-        <main className='flex flex-1 flex-col gap-2 p-2 lg:gap-4 lg:p-4'>{children}</main>
+        <main className='flex h-[calc(100dvh-56px)] max-h-[calc(100dvh-56px)] flex-1 flex-col gap-2 overflow-y-scroll p-2 lg:gap-4 lg:p-4'>
+          {children}
+        </main>
       </div>
     </div>
   )

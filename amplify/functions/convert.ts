@@ -82,11 +82,20 @@ const KarnsItemColumns = [
 type KarnsItem = { [key in (typeof KarnsItemColumns)[number]]: string }
 type Item = Schema['Item']['type']
 
+export const checkDigit = (upc: string) => {
+  const sum = [...upc.split('').reverse().join('')].reduce(
+    (acc, item, index) => acc + (index % 2 === 0 ? Number(item) * 3 : Number(item)),
+    0
+  )
+  return (10 - (sum % 10)) % 10
+}
+
 const karnsItemToItem = (karnsItem: KarnsItem): Item => {
+  const upc = `${karnsItem.upc.split('-')[0].charAt(2)}${karnsItem.upc.split('-')[1]}${karnsItem.upc.split('-')[2]}`
   return {
     id: karnsItem.itemCode,
     date: new Date(karnsItem.runDate).toISOString().slice(0, 10),
-    upc: karnsItem.upc,
+    upc: `${upc}${checkDigit(upc)}`,
     brand: karnsItem.brand,
     name: karnsItem.description,
     pack: karnsItem.pack,
